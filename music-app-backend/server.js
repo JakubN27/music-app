@@ -161,7 +161,7 @@ app.get('/api/playlists/:id', (req, res) =>{
     }
 
     //Return playlist by ID
-    res.status(200).json(playist)
+    res.status(200).json(playlist)
 })
 
 //POST to add a new playlist
@@ -229,10 +229,74 @@ app.put('/api/playlists/:id/add-song', (req,res) => {
 
     //Return success message and updated playlist
     res.status(200).json({
-        message: '"${song.name}" added to "${playlist.name}"',
+        message: `"${song.name}" added to "${playlist.name}"`,
         data: playlist
     })
 
+
+})
+
+//PUT to remove a song from playlist
+app.put('/api/playlists/:id/remove-song', (req,res) => {
+    const{id} = req.params; //Get playlist ID from URL
+    const{songID} = req.body //Get song ID from body
+
+    //Validate song ID is given
+    if(!songID) {
+        return res.status(400).json({message: 'Song ID is required'});
+    }
+
+    //Find playlist by ID
+    const playlist = playlists.find((playlist) => playlist.id === id);
+
+    //If it doesnt exist, return 404 error
+    if(!playlist){
+        return res.status(404).json({ message: 'Playlist not found' });
+    }
+
+    //Check if the song exists
+    const song = songs.find((song) => song.id === songID);
+
+    if(!song){
+        return res.status(404).json({ message: 'Song not found' });
+    }
+
+    //Find song index
+    const songIndex = playlist.songsInPlaylist.findIndex((songId) => songId === songID);
+    //Check if song in playlist
+    if (songIndex === -1){
+        return res.status(404).json({message: "Song not found in playlsit"});
+    }
+    //Remove song from playlist
+    playlist.songsInPlaylist.splice(songIndex)
+
+    //Return success message and updated playlist
+    res.status(200).json({
+        message: `"${song.name}" added to "${playlist.name}"`,
+        data: playlist
+    })
+
+
+})
+
+//DELETE playlist
+app.delete('/api/playlists/:id', (req,res) => {
+    const {id} = req.params;
+
+    //Find song by ID
+    const playlistIndex = playlists.findIndex((playlist) => playlist.id === id);
+
+    //If it doesnt exist, return 404 error
+    if (playlistIndex === -1){
+        return res.status(404).json({message: 'playlist not found'});
+    }
+    //Remove and return song from array
+    const deletedPlaylist = playlists.splice(playlistIndex, 1)[0];
+
+    //Update songs file
+    fs.writeFileSync(playlistsFilePath, JSON.stringify(playlists, null, 2), 'utf8')
+
+    res.status(200).json({message: 'Playlist deleted succesfully', data: deletedPlaylist});
 
 })
 
