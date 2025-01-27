@@ -7,10 +7,12 @@ const PORT = 3000;
 
 //Middleware to parse json in the request body
 app.use(express.json());
+//Connect frontend requests
+app.use(express.static(path.join(__dirname, 'music-app-frontend')));
 
 //Default route to confirm the server in working
 app.get('/', (req, res) => {
-    res.send('Server is running')
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Start the server

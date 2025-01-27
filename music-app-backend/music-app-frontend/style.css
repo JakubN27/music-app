@@ -1,0 +1,163 @@
+
+
+.navbar {
+    background-color: rgb(50, 50, 50);
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid rgb(211, 211, 211);
+    border-top: 2px solid rgb(211, 211, 211);
+}
+
+
+.navbar button {
+    font-size: 1.2em;
+    padding: 15px 60px;
+    margin: auto;
+    background-color: rgb(110, 50, 130); 
+    color: rgb(240, 240, 240);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.navbar button:hover {
+    background-color: rgb(90, 40, 110);
+    transform: scale(1.05); 
+}
+
+
+
+.top-section {
+    background-color: rgb(25, 25, 25);
+    padding: 20px; 
+    text-align: center; 
+}
+
+.title-box {
+    background-color: rgb(110, 50, 130);
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin: auto;                  
+    text-align: center;
+    width: 50%;           
+    border-radius: 10px;
+}
+
+.title-box h1 {
+    font-family: 'Arial', sans-serif;
+    font-size: 3em;
+    color: rgb(240, 240, 240);
+    margin: 0;  
+}
+
+
+
+body {
+    background-color: rgb(25, 25, 25);
+    color: rgb(240, 240, 240);
+}
+
+main#content {
+    background-color: rgb(30, 30, 30);
+    color: rgb(240, 240, 240);       
+    width: 80%; 
+    min-height: 80vh;                 
+    max-width: 1200px;              
+    margin: 20px auto;              
+    padding: 20px;                  
+    border-radius: 10px;            
+    text-align: center;              
+} 
+
+main#content .song-button{
+    display: block;
+    width: 100%; 
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1em;
+    color: rgb(240, 240, 240);
+    background-color: rgb(50, 50, 50);
+    border: none; 
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; 
+    text-align: center; 
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+main#content h2 {
+    font-size: 2em;
+    margin-bottom: 15px;
+    color: rgb(240, 240, 240);
+}
+
+main#content ul {
+    list-style: none;
+    padding: 0;
+}
+
+main#content ul li {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: rgb(50, 50, 50);
+    border-radius: 8px;
+    color: rgb(240, 240, 240);
+}
+
+form#uploadForm label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 1.2em;
+}
+
+form#uploadForm input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid rgb(150, 150, 150);
+}
+
+button {
+    padding: 10px 20px;
+    background-color: rgb(110, 50, 130);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: rgb(90, 40, 110);
+}
+
+
+
+/*Mobile compatibility*/
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+    }
+    .navbar button {
+        width: 80%;
+        margin-bottom: 10px;
+        padding: 15px;
+    font-size: 1em;
+    }
+    h1 {
+        font-size: 1.5rem;
+      }
+    /* Remove the bottom margin from the last button */
+    .navbar button:last-child {
+        margin-bottom: 0;
+    }
+    
+    .navbar button:hover {
+        transform: none; /* Avoid hover scaling on mobile */
+    }
+}

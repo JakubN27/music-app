@@ -13,5 +13,40 @@
     "id": "2a5d4d9c-f7ea-4b73-a042-1cba2ac7a8da",
     "title": "Pick up the phone",
     "artist": "Travis Scott"
+  },
+  {
+    "id": "b45c87f5-3521-4cc0-9cd4-f339f5da261a",
+    "title": "New Drop",
+    "artist": "Don Toliver"
+  },
+  {
+    "id": "eaf7d9b9-f63a-4d69-be75-dc57bdcddf7a",
+    "title": "Stories About My Brother",
+    "artist": "Drake"
+  },
+  {
+    "id": "89f694ce-1581-412d-9947-aa93df26f956",
+    "title": "SKI",
+    "artist": "Future"
+  },
+  {
+    "id": "5d00128a-d967-45f4-8879-17d3ce862762",
+    "title": "The Ride",
+    "artist": "Drake"
+  },
+  {
+    "id": "63c292b2-cfbe-41d2-b740-8efc7cf1a648",
+    "title": "Jungle",
+    "artist": "Drake"
+  },
+  {
+    "id": "fb04a483-6886-41ff-a3d6-e4ffb00f2c20",
+    "title": "Skeletons",
+    "artist": "Travis Scott"
+  },
+  {
+    "id": "c17ae2ff-feae-4240-88b9-d9b7ed70020c",
+    "title": "NEVER LEFT",
+    "artist": "Lil Tecla"
   }
 ]
