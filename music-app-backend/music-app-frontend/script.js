@@ -6,7 +6,101 @@ document.addEventListener('DOMContentLoaded', () => {
     const contentSection = document.getElementById('content');
 
 
-//Songs Section
+    //Songs Section
+    // Event listener for song buttons
+    function attachSongButtonListeners() {
+        //Finds all song buttons and attaches listeners to all of them
+        const songButtons = document.querySelectorAll('.song-button');
+        songButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                //Song data from the dataset
+                const songId = button.dataset.id;
+                const songTitle = button.dataset.title; 
+                const songArtist = button.dataset.artist
+
+                console.log(songId);
+
+                // Display the song title and action buttons
+                const content = document.getElementById('content');
+                content.innerHTML = `
+                    <h2>${songTitle}</h2>
+                    <div class="action-buttons">
+                        <button class="action-button" id="edit-song-${songId}">Edit Song</button>
+                        <button class="action-button" id="delete-song-${songId}">Delete Song</button>
+                    </div>
+                `;
+
+                // Add event listeners for the buttons
+                document.getElementById(`edit-song-${songId}`).addEventListener('click', () => editSong(songId, songTitle, songArtist));
+                document.getElementById(`delete-song-${songId}`).addEventListener('click', () => deleteSong(songId));
+            });
+        });
+    }
+    // Functions for the buttons
+    function editSong(songId, songTitle, songArtist) {
+        const content = document.getElementById('content');
+        content.innerHTML = `
+            <h2>Edit Song: ${songTitle}</h2>
+            <form id="editForm">
+                <label for="newTitle">New Title:</label>
+                <input type="text" id="newTitle" value="${songTitle}" required>
+                <label for="newTitle">New Artist:</label>
+                <input type="text" id="newArtist" value="${songArtist}" required>
+                <button type="submit">Save Changes</button>
+            </form>
+        `;
+
+        document.getElementById('editForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newTitle = document.getElementById('newTitle').value;
+            const newArtist = document.getElementById('newArtist').value;
+
+            fetch(`/api/songs/${songId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title: newTitle , artist : newArtist}),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(() => {
+                    content.innerHTML = `<p>Song updated successfully!</p>`;
+                })
+                .catch((error) => {
+                    console.error('Error updating song:', error);
+                    content.innerHTML = '<p>Error updating song. Please try again later.</p>';
+                });
+        });
+    }
+
+    function deleteSong(songId) {
+        if (confirm('Are you sure you want to delete this song?')) {
+            fetch(`/api/songs/${songId}`, {
+                method: 'DELETE',
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(() => {
+                    const content = document.getElementById('content');
+                    content.innerHTML = `<p>Song deleted successfully!</p>`;
+                })
+                .catch((error) => {
+                    console.error('Error deleting song:', error);
+                    const content = document.getElementById('content');
+                    content.innerHTML = '<p>Error deleting song. Please try again later.</p>';
+                });
+        }
+    }
+    
     viewAllSongsButton.addEventListener('click', () => {
         //Add loading message
         const content = document.getElementById('content');
@@ -41,21 +135,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     const button = document.createElement('button');
                     button.textContent = `${song.title} by ${song.artist}`;
                     button.classList.add('song-button'); // Make it the song-button class
+                    button.dataset.id = song.id; //Use dataset to keep song data after content changes
+                    button.dataset.title = song.title;
+                    button.dataset.artist = song.artist;
 
                     // Add a click event to the button
                     button.addEventListener('click', () => {
-                        alert(`You clicked on "${song.title}" by ${song.artist}`);
-                    });
+                        console.log(`clicked on ${song.title}`)
+                        //Adds individual song listeners for each song on the page
+                        attachSongButtonListeners()
+                    }); 
 
                     // Append the button to the list
                     songList.appendChild(button);
                 });
 
-            // Append the list to the content section
-            content.appendChild(songList);
-    
                 // Append the list to the content section
                 content.appendChild(songList);
+                attachSongButtonListeners()
+                
             })
             //Error handling
             .catch(error => {
@@ -115,6 +213,77 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
 //Playlists Section
+
+// Event listener for playlist buttons
+function attachPlaylistButtonListeners() {
+    //Finds all playlist buttons and attaches listeners to all of them
+    const playlistButtons = document.querySelectorAll('.playlist-button');
+    playlistButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            //Playlist data from the dataset
+            const playlistId = button.dataset.id;
+            const playlistName = button.dataset.name; 
+            const playlistSongs = button.dataset.songsInPlaylist
+
+            console.log(playlistId);
+
+            // Display the playlist title and action buttons
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <h2>${playlistName}</h2>
+                <div class="action-buttons">
+                    <button class="action-button" id="edit-playlist-${playlistId}">Edit Playlist</button>
+                    <button class="action-button" id="delete-playlist-${playlistId}">Delete Playlist</button>
+                </div>
+            `;
+
+            // Add event listeners for the buttons
+            document.getElementById(`edit-playlist-${playlistId}`).addEventListener('click', () => editPlaylist(playlistId, playlistName));
+            document.getElementById(`delete-playlist-${playlistId}`).addEventListener('click', () => deletePlaylist(playlistId));
+        });
+    });
+}
+// Functions for the buttons
+function editPlaylist(playlistId, playlistName) {
+    const content = document.getElementById('content');
+    content.innerHTML = `
+        <h2>Edit Playlist: ${playlistName}</h2>
+        <form id="editForm">
+            <label for="newName">New Name:</label>
+            <input type="text" id="newName" value="${playlistName}" required>
+            <button type="submit">Save Changes</button>
+        </form>
+    `;
+
+    document.getElementById('editForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newName = document.getElementById('newName').value;
+
+        fetch(`/api/playlists/${playlistId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: newName}),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(() => {
+                content.innerHTML = `<p>Playlist updated successfully!</p>`;
+            })
+            .catch((error) => {
+                console.error('Error updating playlist:', error);
+                content.innerHTML = '<p>Error updating playlist. Please try again later.</p>';
+            });
+    });
+}
+//Add delete playlist function here
+
+
     viewPlaylistsButton.addEventListener('click', () => {
         //Add loading message
         const content = document.getElementById('content');
@@ -160,30 +329,68 @@ document.addEventListener('DOMContentLoaded', () => {
                     uploadForm.addEventListener('submit', (e) => {
                         e.preventDefault();
                         const playlistName = document.getElementById('playlistName').value;
-                        contentSection.innerHTML = `<h2>Created new playlist: "${playlistName}".</h2>`;
+            
+                        //Add data to playlists.json
+                        fetch('/api/playlists', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                name: playlistName,
+                            })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            contentSection.innerHTML = `<p>Successfully created playlist: "${data.data.name}".</p>`;
+                        })
+                        .catch(error => {
+                            console.error('Error created playlist:', error);
+                            contentSection.innerHTML = '<p>Error creating playlist. Please try again later.</p>';
+                        });
                     });
                 });
     
+                //Display all playlists
                 //Turn response into a list and display
                 if (data.length === 0) {
                     content.innerHTML = '<h2>No playlists available.</h2>';
                     return;
                 }
     
-                const songList = document.createElement('ul');
+                const playlistList = document.createElement('div');
                 data.forEach(playlist => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `${playlist.name} : ${playlist.songsInPlaylist.length} songs`;
-                    songList.appendChild(listItem);
+                    // Create a button for each song
+                    const button = document.createElement('button');
+                    button.textContent = `${playlist.name}: ${playlist.songsInPlaylist.length}`;
+                    button.classList.add('playlist-button'); // Make it the playlist-button class
+                    button.dataset.id = playlist.id; //Use dataset to keep song data after content changes
+                    button.dataset.name = playlist.name;
+                    button.dataset.playlistSongs = playlist.songsInPlaylist;
+                    
+
+                    // Add a click event to the button
+                    button.addEventListener('click', () => {
+                        attachPlaylistButtonListeners()
+                    });
+
+                    // Append the button to the list
+                    playlistList.appendChild(button);
                 });
-    
+
                 // Append the list to the content section
-                content.appendChild(songList);
+                content.appendChild(playlistList);
+                attachPlaylistButtonListeners()
             })
             //Error handling
             .catch(error => {
-                console.error('Error fetching songs:', error);
-                content.innerHTML = '<h2>Error fetching songs. Please try again later.</h2>';
+                console.error('Error fetching playlists:', error);
+                content.innerHTML = '<h2>Error fetching playlists. Please try again later.</h2>';
             });
     });
 });

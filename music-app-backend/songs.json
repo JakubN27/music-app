@@ -1,7 +1,7 @@
 [
   {
     "id": "3a52ade4-8046-4110-bd5b-1345ef51240f",
-    "title": "Fancy",
+    "title": "Lord Knows",
     "artist": "Drake"
   },
   {
@@ -11,7 +11,7 @@
   },
   {
     "id": "2a5d4d9c-f7ea-4b73-a042-1cba2ac7a8da",
-    "title": "Pick up the phone",
+    "title": "5% Tint",
     "artist": "Travis Scott"
   },
   {
@@ -48,5 +48,10 @@
     "id": "c17ae2ff-feae-4240-88b9-d9b7ed70020c",
     "title": "NEVER LEFT",
     "artist": "Lil Tecla"
+  },
+  {
+    "id": "4345018f-b311-4fcf-97e9-7e93d9c13e1e",
+    "title": "Blick Sum",
+    "artist": "Latto"
   }
 ]

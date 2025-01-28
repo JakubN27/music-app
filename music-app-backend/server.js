@@ -201,6 +201,29 @@ app.post('/api/playlists', (req, res) => {
     res.status(201).json({message: 'Playlist created succesfully', data: newPlaylist});
 })
 
+//PUT to update an existing playlist name
+app.put('/api/playlists/:id', (req, res) => {
+    const {id} = req.params
+    const {name} = req.body
+
+    //Find plauylist by ID
+    const playlistIndex = playlists.findIndex((playlist) => playlist.id === id);
+
+    //If it doesnt exist, return 404 error
+    if (playlistIndex === -1){
+        return res.status(404).json({message: 'playlist not found'});
+    }
+
+    //Update the song if new name given
+    if (name){
+        playlists[playlistIndex].name = name;
+    }
+
+    fs.writeFileSync(playlistsFilePath, JSON.stringify(playlists, null, 2), 'utf8');
+
+    res.status(200).json({message: 'Playlist updated succesfully', data: playlists[playlistIndex]});
+})
+
 //PUT to add new song to playlist
 app.put('/api/playlists/:id/add-song', (req,res) => {
     const{id} = req.params; //Get playlist ID from URL

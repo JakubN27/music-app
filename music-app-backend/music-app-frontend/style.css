@@ -88,6 +88,21 @@ main#content .song-button{
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+main#content .playlist-button{
+    display: block;
+    width: 100%; 
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1em;
+    color: rgb(240, 240, 240);
+    background-color: rgb(50, 50, 50);
+    border: none; 
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; 
+    text-align: center; 
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
 main#content h2 {
     font-size: 2em;
     margin-bottom: 15px;
