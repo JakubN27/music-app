@@ -251,10 +251,11 @@ app.put('/api/playlists/:id/add-song', (req,res) => {
 
     //Add song to playlist
     playlist.songsInPlaylist.push(songID)
+    fs.writeFileSync(playlistsFilePath, JSON.stringify(playlists, null, 2), 'utf8');
 
     //Return success message and updated playlist
     res.status(200).json({
-        message: `"${song.name}" added to "${playlist.name}"`,
+        message: `"${song.title}" added to "${playlist.name}"`,
         data: playlist
     })
 

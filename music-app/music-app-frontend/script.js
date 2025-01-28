@@ -282,7 +282,28 @@ function editPlaylist(playlistId, playlistName) {
     });
 }
 //Add delete playlist function here
-
+function deletePlaylist(playlistId) {
+    if (confirm('Are you sure you want to delete this playlist?')) {
+        fetch(`/api/playlists/${playlistId}`, {
+            method: 'DELETE',
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(() => {
+                const content = document.getElementById('content');
+                content.innerHTML = `<p>Playlist deleted successfully!</p>`;
+            })
+            .catch((error) => {
+                console.error('Error deleting playlist:', error);
+                const content = document.getElementById('content');
+                content.innerHTML = '<p>Error deleting playlist. Please try again later.</p>';
+            });
+    }
+}
 
     viewPlaylistsButton.addEventListener('click', () => {
         //Add loading message
