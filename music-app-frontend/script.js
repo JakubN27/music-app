@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button class="action-button" id="delete-song-${songId}">Delete Song</button>
                     </div>
                 `;
-
                 // Add event listeners for the buttons
                 document.getElementById(`edit-song-${songId}`).addEventListener('click', () => editSong(songId, songTitle, songArtist));
                 document.getElementById(`delete-song-${songId}`).addEventListener('click', () => deleteSong(songId));
