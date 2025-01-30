@@ -1,0 +1,19 @@
+[
+  {
+    "id": "8fcdde53-deab-4e0f-b957-5688f9d90d59",
+    "name": "My Playlist",
+    "songsInPlaylist": []
+  },
+  {
+    "id": "f260230e-5ff7-43db-b3b2-5fc68334dc98",
+    "name": "Playlist 1",
+    "songsInPlaylist": []
+  },
+  {
+    "id": "ae493f53-20a7-478e-9310-8833c9b5e501",
+    "name": "Playlist 2",
+    "songsInPlaylist": [
+      "774e17e2-4410-4ef3-8f44-5f3e7b62513d"
+    ]
+  }
+]
