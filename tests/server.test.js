@@ -1,8 +1,21 @@
 const request = require('supertest');
 const app = require('../server');
+const fs = require ('fs')
+const path = require('path')
+
+//Clear files before testing
+const songsFilePath = path.join(__dirname, '../songs.json');
+const playlistsFilePath = path.join(__dirname, '../playlists.json');
+const resetData = () => {
+    fs.writeFileSync(songsFilePath, JSON.stringify([], null, 2), 'utf8');
+    fs.writeFileSync(playlistsFilePath, JSON.stringify([], null, 2), 'utf8');
+};
 
 
 describe('Music App API', () => {
+    beforeEach(() => {
+        resetData();
+    });
     describe('Songs API', () => {
         test('Should create a new song', async () => {
             const response = await request(app)
@@ -19,11 +32,21 @@ describe('Music App API', () => {
         });
 
         test('Should fetch all songs', async () => {
+            // Log the initial state of the songs array
             const initialResponse = await request(app).get('/api/songs');
+            console.log('Initial songs:', initialResponse.body); // Debugging
+        
+            // Create a song
             await request(app).post('/api/songs').send({ title: 'Song 2', artist: 'Artist 2' });
+        
+            // Log the state of the songs array after creating a song
             const response = await request(app).get('/api/songs');
+            console.log('Songs after creation:', response.body); // Debugging
+        
+            // Assertions
             expect(response.status).toBe(200);
-            expect(response.body.length).toBe(2);
+            expect(response.body.length).toBe(2); // Ensure only two songs exist
+        });
 
         test('Should return 404 for non-existent song', async () => {
             const response = await request(app).get('/api/songs/invalid-id');
@@ -57,23 +80,35 @@ describe('Music App API', () => {
         });
 
         test('Should add a song to a playlist', async () => {
+            // Create a song
             const songRes = await request(app)
                 .post('/api/songs')
                 .send({title: 'Song 3', artist: 'Artist 3'});
+            console.log('Song response:', songRes.body); // Debugging
+        
+            // Ensure the song was created successfully
             expect(songRes.status).toBe(201);
-            expect(songRes.body.data).toBeDefined();
-            const songId = songRes.body.data.id;
+            expect(songRes.body.data).toBeDefined(); // Ensure the `data` field exists
+            const songId = songRes.body.data.id; // Access the `id` field
+        
+            // Create a playlist
             const playlistRes = await request(app)
                 .post('/api/playlists')
                 .send({ name: 'Playlist 2' });
-            console.log('Playlist response:', playlistRes.body);
+            console.log('Playlist response:', playlistRes.body); // Debugging
+        
+            // Ensure the playlist was created successfully
             expect(playlistRes.status).toBe(201);
-            expect(playlistRes.body.data).toBeDefined(); 
-            const playlistId = playlistRes.body.data.id;
+            expect(playlistRes.body.data).toBeDefined(); // Ensure the `data` field exists
+            const playlistId = playlistRes.body.data.id; // Access the `id` field
+        
+            // Add the song to the playlist
             const response = await request(app)
                 .put(`/api/playlists/${playlistId}/add-song`)
                 .send({ songID: songId });
-            console.log('Add song to playlist response:', response.body); 
+            console.log('Add song to playlist response:', response.body); // Debugging
+        
+            // Assertions
             expect(response.status).toBe(200);
             expect(response.body.message).toBeDefined();
             expect(response.body.data).toBeDefined();
