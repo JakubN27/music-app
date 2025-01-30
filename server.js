@@ -45,7 +45,7 @@ app.get('/api/songs/:id', (req, res) =>{
 
 //GET all songs
 app.get('/api/songs', (req, res) => {
-    res.json(songs);
+    res.status(200).json(songs);
 });
 
 //GET only song ids

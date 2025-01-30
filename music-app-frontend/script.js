@@ -455,6 +455,57 @@ function removeSongFromPlaylist(playlistId) {
     });
 }
 
+function createPlaylistButton(){
+    // Add button for creating a new playlist
+    const createPlaylistButton = document.createElement('button');
+    createPlaylistButton.textContent = 'Create New Playlist';
+    createPlaylistButton.classList.add('create-playlist-button');
+    content.appendChild(createPlaylistButton);
+
+    //Create playlist section, similar to upload songs section
+    createPlaylistButton.addEventListener('click', () => {
+        //Display on page
+        contentSection.innerHTML = `
+            <h2>Create new playlist</h2>
+            <form id="uploadForm">
+                <label for="playlistName">Playlist Name:</label>
+                <input type="text" id="playlistName" name="playlistName" required><br><br>
+                <button type="submit">Upload</button>
+            </form>
+        `;
+
+        //Form for new playlist
+        const uploadForm = document.getElementById('uploadForm');
+        uploadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const playlistName = document.getElementById('playlistName').value;
+
+            //Add data to playlists.json
+            fetch('/api/playlists', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: playlistName,
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                contentSection.innerHTML = `<p>Successfully created playlist: "${data.data.name}".</p>`;
+            })
+            .catch(error => {
+                console.error('Error created playlist:', error);
+                contentSection.innerHTML = '<p>Error creating playlist. Please try again later.</p>';
+            });
+        });
+    });
+}
 
 //View Playlists page
     viewPlaylistsButton.addEventListener('click', () => {
@@ -478,61 +529,16 @@ function removeSongFromPlaylist(playlistId) {
                 const header = document.createElement('h2');
                 header.textContent = 'Playlists:';
                 content.appendChild(header);
+                createPlaylistButton()
 
-                // Add button for creating a new playlist
-                const createPlaylistButton = document.createElement('button');
-                createPlaylistButton.textContent = 'Create New Playlist';
-                createPlaylistButton.classList.add('create-playlist-button');
-                content.appendChild(createPlaylistButton);
-
-                //Create playlist section, similar to upload songs section
-                createPlaylistButton.addEventListener('click', () => {
-                    //Display on page
-                    contentSection.innerHTML = `
-                        <h2>Create new playlist</h2>
-                        <form id="uploadForm">
-                            <label for="playlistName">Playlist Name:</label>
-                            <input type="text" id="playlistName" name="playlistName" required><br><br>
-                            <button type="submit">Upload</button>
-                        </form>
-                    `;
-            
-                    //Form for new playlist
-                    const uploadForm = document.getElementById('uploadForm');
-                    uploadForm.addEventListener('submit', (e) => {
-                        e.preventDefault();
-                        const playlistName = document.getElementById('playlistName').value;
-            
-                        //Add data to playlists.json
-                        fetch('/api/playlists', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                name: playlistName,
-                            })
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`HTTP error! Status: ${response.status}`);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            contentSection.innerHTML = `<p>Successfully created playlist: "${data.data.name}".</p>`;
-                        })
-                        .catch(error => {
-                            console.error('Error created playlist:', error);
-                            contentSection.innerHTML = '<p>Error creating playlist. Please try again later.</p>';
-                        });
-                    });
-                });
+                
     
                 //Display all playlists
                 //Turn response into a list and display
                 if (data.length === 0) {
                     content.innerHTML = '<h2>No playlists available.</h2>';
+                    // Add button for creating a new playlist
+                    createPlaylistButton()
                     return;
                 }
     
